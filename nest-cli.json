@@ -1,22 +1,22 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/virtal-facility/src",
+  "sourceRoot": "apps/virtual-facility/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/virtal-facility/tsconfig.app.json"
+    "tsConfigPath": "apps/virtual-facility/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/virtal-facility",
+  "root": "apps/virtual-facility",
   "projects": {
-    "virtal-facility": {
+    "virtual-facility": {
       "type": "application",
-      "root": "apps/virtal-facility",
+      "root": "apps/virtual-facility",
       "entryFile": "main",
-      "sourceRoot": "apps/virtal-facility/src",
+      "sourceRoot": "apps/virtual-facility/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/virtal-facility/tsconfig.app.json"
+        "tsConfigPath": "apps/virtual-facility/tsconfig.app.json"
       }
     },
     "workflows-service": {
