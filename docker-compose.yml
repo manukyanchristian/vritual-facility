@@ -30,6 +30,9 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=workflows
+    ports:
+      - 5433:5432
+
   virtual-facility:
     build:
       context: .
@@ -60,3 +63,5 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=virtual-facility
+    ports:
+      - 5432:5432
