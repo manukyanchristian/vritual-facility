@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, Repository } from 'typeorm';
 import { Workflow } from './entities/workflow.entity';
@@ -6,6 +6,8 @@ import { CreateWorkflowDto, UpdateWorkflowDto } from '@app/workflows';
 
 @Injectable()
 export class WorkflowsService {
+  private readonly logger = new Logger(WorkflowsService.name);
+
   constructor(
     @InjectRepository(Workflow)
     private readonly workflowsRepository: Repository<Workflow>,
@@ -29,6 +31,10 @@ export class WorkflowsService {
     } as DeepPartial<Workflow>);
 
     const newWorkflowEntity = await this.workflowsRepository.save(workflow);
+    this.logger.debug(
+      `Created workflow with id ${newWorkflowEntity.id} for building ${newWorkflowEntity.buildingId}`,
+    );
+
     return newWorkflowEntity;
   }
 

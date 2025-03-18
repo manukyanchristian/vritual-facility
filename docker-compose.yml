@@ -15,6 +15,8 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=workflows
       - NATS_URL=nats://nats:4222
+    deploy:
+      replicas: 3
     volumes:        
       - ./libs:/usr/src/app/libs
       - ./package.json:/usr/src/app/package.json
@@ -27,9 +29,6 @@ services:
     depends_on: # This instructs Docker Compose to start the "workflows-db" container before starting the "workflows-service" container
       - workflows-db
       - nats
-    ports:
-      # for healthcheck only, will be removed.
-      - 3001:3001
   workflows-db:
     image: postgres:13.2-alpine
     environment: # We need to make sure these environment variables match the ones we specified in the "workflows-service" service
