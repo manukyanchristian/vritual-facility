@@ -8,16 +8,19 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.connectMicroservice<MicroserviceOptions>(
+    // {
+    //   transport: Transport.NATS,
+    //   options: {
+    //     servers: process.env.NATS_URL,
+    //     queue: 'workflows-service',
+    //   },
+    // },
     {
-      // transport: Transport.NATS,
       transport: Transport.RMQ,
-      // options: {
-      //   servers: process.env.NATS_URL,
-      //   queue: 'workflows-service',
-      // },
       options: {
         urls: [process.env.RABBITMQ_URL as string],
         queue: 'workflows-service',
+        noAck: false,
       },
     },
     { inheritAppConfig: true },
