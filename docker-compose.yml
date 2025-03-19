@@ -14,7 +14,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=workflows
-      - NATS_URL=nats://nats:4222
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     deploy:
       replicas: 3 # This instructs Docker Compose to start 3 instances of the "workflows-service" container
     volumes:        
@@ -27,14 +27,13 @@ services:
       - ./apps/workflows-service:/usr/src/app/apps/workflows-service
     depends_on: # This instructs Docker Compose to start the "workflows-db" container before starting the "workflows-service" container
       - workflows-db
-      - nats
+      - rabbitmq
   workflows-db:
     image: postgres:13.2-alpine
     environment: # We need to make sure these environment variables match the ones we specified in the "workflows-service" service
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=workflows
-
   virtual-facility:
     build:
       context: .
@@ -50,7 +49,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=virtual-facility
-      - NATS_URL=nats://nats:4222
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     volumes:        
       - ./libs:/usr/src/app/libs
       - ./package.json:/usr/src/app/package.json    
@@ -60,7 +59,7 @@ services:
     depends_on:
       - virtual-facility-db
       - workflows-service
-      - nats
+      - rabbitmq
   virtual-facility-db:
     image: postgres:13.2-alpine
     environment:
@@ -69,7 +68,6 @@ services:
       - POSTGRES_DB=virtual-facility
   nats:
     image: nats:2.2.2-alpine
-
   alarms-service:
     build:
       context: .
@@ -87,7 +85,6 @@ services:
       - ./apps/alarms-service:/usr/src/app/apps/alarms-service
     depends_on:
       - nats
-
   alarms-generator:
     build:
       context: .
@@ -105,7 +102,6 @@ services:
       - ./apps/alarms-generator:/usr/src/app/apps/alarms-generator
     depends_on:
       - nats
-
   alarms-classifier-service:
     build:
       context: .
@@ -123,7 +119,6 @@ services:
       - ./apps/alarms-classifier-service:/usr/src/app/apps/alarms-classifier-service
     depends_on:
       - nats
-
   notifications-service:
     build:
       context: .
@@ -141,3 +136,5 @@ services:
       - ./apps/notifications-service:/usr/src/app/apps/notifications-service
     depends_on:
       - nats
+  rabbitmq:
+    image: rabbitmq:3-management
