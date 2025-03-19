@@ -1,0 +1,4 @@
+- convert inbox and outbox modules to common libraries.
+- implement RabbitMQ client for distributed tracing, similar to NATS client and use it for notification service.
+- enhance the business logic of buildings and workflows.
+- create another service that uses MongoDB.
